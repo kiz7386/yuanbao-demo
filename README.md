@@ -26,11 +26,12 @@
 - Body:
 ```
 {
- 		"spId": "PL0001",
-		"productId": "lottery",
-		"returnUrl": "www.google.com",
-		"token": "20180502zaauxfrr",
-		"sign":"c08d3e4cb641fbbdc5b06b448dd22395"
+	"spId": "PL0001",
+	"productId": "lottery",
+	"returnUrl": "www.google.com",
+	"token": "20180502zaauxfrr",
+	"requestTime": "20180503152756",
+	"sign": "c08d3e4cb641fbbdc5b06b448dd22395"
 }
 ```
 
