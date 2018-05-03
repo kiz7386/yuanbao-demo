@@ -78,7 +78,7 @@
 ### <p id="balance(GET)">balance(GET)-取得玩家餘額</p>
 #### Reuqest
 
-- Method: **PUT**
+- Method: **GET**
 - URL: ```平台提供自定義接口位置```
 - Headers： Content-Type:application/json
 - Body:
