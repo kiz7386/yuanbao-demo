@@ -127,7 +127,7 @@
 
 ## 傳輸規範
 
-  - 使用TPC/IP協議作為傳輸層
+  - 使用TCP/IP作為傳輸層協議
   - 使用HTTP作為應用層協議
   - 傳遞參數格式皆為json(須使用Content-type規範header)
   - 此接口清單遵循restful設計理念
