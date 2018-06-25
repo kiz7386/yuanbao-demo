@@ -1,0 +1,183 @@
+# 元寶數據源系統接口文檔
+
+# 文件目的
+  - 本文檔介紹平台串接數據源接口參數規範、加密驗簽規則，並於文末提供各語言版本串接範例。
+
+
+# 傳輸規範
+
+  - 使用TCP/IP作為傳輸層協議
+  - 使用HTTP作為應用層協議
+  - 傳遞參數格式皆為json(須使用Content-type規範header)
+  
+  
+# 安全規範
+
+  - 所有接口必須校驗sign簽名值正確無誤,再處理業務邏輯
+
+
+# 接口說明
+## 元寶系統接口清單
+
+  - bet-records/{language}-<a href="#bet-records/{language}(POST)">取得所有注單紀錄(POST)</a>
+  - bet-records/{language}/{account}-<a href="#bet-records/{language}/{account}(POST)">取得單一會員注單紀錄(POST)</a>
+
+
+## 參數說明(<a href="#parametersTable">參數說明</a>) 
+
+### <p id="bet-records/{language}(POST)">bet-records/{language}-取得所有注單紀錄(POST)</p>
+#### Reuqest
+
+- Method: **POST**
+- URL: ```/data-source/bet-records/{language}```
+- Headers： Content-Type:application/json
+- Body:
+```
+{
+	"spId": "PL0001",
+	"productId": "racing",
+	"date": "20180501-20180504",
+	"requestTime": "20180504163056",
+	"sign": "c08d3e4cb641fbbdc5b06b448dd22395"
+}
+```
+
+#### Response
+- Body
+```
+{
+	"retCode": "0",
+	"data": {
+		"count": 800,
+		"sumAmt": 18000,
+		"betResult": [{
+				"betNumber": "20180103125646040b006",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125623"
+			},
+			{
+				"betNumber": "20180103125646040b007",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125633"
+			},
+			{
+				"betNumber": "20180103125646040b008",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125633"
+			}
+		]
+	}
+}
+```
+
+
+### <p id="bet-records/{language}/{account}(POST)">bet-records/{language}/{account}(POST)-取得單一會員注單紀錄(POST)</p>
+#### Reuqest
+
+- Method: **POST**
+- URL: ```/data-source/bet-records/{language}/{account}```
+- Headers： Content-Type:application/json
+- Body:
+```
+{
+	"spId": "PL0001",
+	"productId": "racing",
+	"date": "20180501-20180504",
+	"requestTime": "20180504163056",
+	"sign": "c08d3e4cb641fbbdc5b06b448dd22395"
+}
+```
+
+#### Response
+- Body
+```
+{
+	"retCode": "0",
+	"data": {
+		"count": 800,
+		"sumAmt": 18000,
+		"betResult": [{
+				"betNumber": "20180103125646040b006",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125623"
+			},
+			{
+				"betNumber": "20180103125646040b007",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125633"
+			},
+			{
+				"betNumber": "20180103125646040b008",
+				"content": {詳見注單內容對照表},
+				"account": "GA205331acx",
+				"requestTime": "20180103125633"
+			}
+		]
+	}
+}
+```
+
+
+## <p id="parametersTable">參數說明</p>
+|參數名稱|參數名稱|參數格式|參數說明|
+|:--|:--|:--|:--|
+|language||String(16)|返回注單內容語言(有以下枚舉值:en、zh-cn、zh-tw)|
+|spId||String(32)|平台ID(由元寶系統發配)|
+|account||String(32)|玩家帳號|
+|type||String(16)|遊戲種類(詳見<a href="#productTable">產品對應表</a>,或傳入all查詢所有)|
+|date||String(17)|查詢起迄日(缺省值為當日)|
+|requestTime||String(14)|請求時間(yyyyMMddHHmmss)|
+|sign||String(32)|簽名(詳見<a href="#signDirection">簽名機制說明)</a>|
+|count||Integer(11)|總注單數|
+|sumAmt||Integer(11)|總碼量(單位:分)|
+|betResult||JsonArray||
+||betNumber|String(32)|注單編號|
+||content|JsonObject|投注內容(詳見<a href="#betResultTable">注單內容對照表</a>)|
+
+
+## <p id="productTable">產品對照表</p>
+|產品ID(productId)|遊戲名稱|
+|:--|:--|
+|racing|北京賽車|
+|rowing|幸運飛艇|
+|timetime|重慶時時彩|
+|cowcow|對戰牛牛|
+
+## <p id="betResultTable">注單內容對照表</p>
+|產品ID(productId)|參數名稱|參數格式|參數說明|
+|:--|:--|:--|:--|
+|racing、rowing、timetime||||
+||type|String(16)|下注種類|
+||content|String(16)|下注內容|
+||amt|Integer(11)|下注金額(單位:分)|
+||earn|Integer(11)|輸贏(正值為玩家贏、負值為玩家輸)(單位:分)||
+|cowcow||||
+||role|String(8)|閒家/莊家|
+||cards|String(32)|取得牌組|
+||point|String(16)|最佳牌型|
+||amt|Integer(11)|下注金額/收注總額(單位:分)|
+||commission|Integer(11)|抽水(單位:分)|
+
+
+## <p id="signDirection">簽名機制說明</p>
+
+
+# 待更新項目
+
+ - 須加上簽名演算範例
+ - 須補全局錯誤碼
+ 
+
+# 更新日誌
+
+ - 2018/05/04	建立文檔	by davidccc
+ - 2018/05/17	產品ID修正	by davidccc
+
+# 附錄：
+
+ - <a href="https://github.com/TorchStoneRD/yuanbao-demo">文檔與DEMO包</a>
